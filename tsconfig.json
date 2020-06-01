@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "sourceMap": false,
+        "target": "es3",
+        "outDir": "./dist",
+        "module": "none",
+        "downlevelIteration": true,
+        "strict": true,
+        "noLib": true,
+        "removeComments": true,
+        "types": ["types-for-adobe/Photoshop/2015.5"]
+    },
+    "exclude": [
+        "node_modules"
+    ],
+}

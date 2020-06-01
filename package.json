@@ -1,0 +1,25 @@
+{
+  "name": "orthomagic4ps",
+  "version": "0.0.1",
+  "description": "Magic Photoshop scripts to make editing orthophotos easier",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MorisatoK/orthomagic4ps.git"
+  },
+  "keywords": [
+    "ortho",
+    "orthophoto",
+    "photoshop",
+    "extendscript"
+  ],
+  "author": "MorisatoK",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/MorisatoK/orthomagic4ps/issues"
+  },
+  "homepage": "https://github.com/MorisatoK/orthomagic4ps#readme",
+  "devDependencies": {
+    "types-for-adobe": "^3.0.0",
+    "typescript": "^3.9.3"
+  }
+}
