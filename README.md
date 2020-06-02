@@ -1,5 +1,5 @@
 # orthomagic4ps
-Magic Photoshop scripts to make editing orthophotos easier. Intended as a supplement to Ortho4XP, as such knowing your way around it is required.
+Magic Photoshop scripts to make editing orthophotos easier. Intended as a supplement to [Ortho4XP](https://github.com/oscarpilote/Ortho4XP), as such knowing your way around it is required.
 
 ## Install
 Download the raw files from the `dist` directory or clone/download the whole repository and copy the files from the `dist` directory to a place of your liking and you can access them from Photoshop.
@@ -16,7 +16,7 @@ Placing hundreds of 4096x4096px large tiles on an enourmous canvas is a very dem
 
 ## Scripts
 ### Import Magic
-This script will place the orthophotos next to each other on the canvas.
+This script will place the orthophotos next to each other on the canvas. Short tutorial video can be seen [here](https://youtu.be/LdK6mX7kBXc).
 
 #### Usage
 1. Create a new document with the dimensions `4096x4096` and transparent background (without a background layer)
