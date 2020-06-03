@@ -18,6 +18,7 @@ class ImportMagic {
         this.getTileInfo();
         this.setDocDimensions();
         this.moveTextures();
+        this.drawGuidesConfirmation();
         this.finish();
     }
 
@@ -116,7 +117,7 @@ class ImportMagic {
     private moveTextures(): void {
         const layers: Layers = app.activeDocument.layers;
     
-        for (var i = 0; i < layers.length; i++) {
+        for (let i: number = 0; i < layers.length; i++) {
             const texInfo: ITexInfo | null = this.getLayerInfo(layers[i]);
             
             if (texInfo === null) {
@@ -194,6 +195,37 @@ class ImportMagic {
     
         const imageScalePercentage: number = (1 / divider) * 100;
         layer.resize(imageScalePercentage, imageScalePercentage, AnchorPosition.TOPLEFT);
+    }
+
+    private drawGuidesConfirmation(): void {
+        const confirmation: boolean = confirm('Draw guides?', true, 'Magic Guides');
+
+        if (confirmation)
+            this.drawGuides();
+    }
+
+    private drawGuides(): void {
+        const texturesCounts: ITexCount = this.getTexturesCounts();
+        const guides: IExtGuides = app.activeDocument.guides as IExtGuides;
+        
+        this.deleteGuides();
+
+        for (let i: number = 1; i < texturesCounts.x; i++)
+            guides.add(Direction.VERTICAL, i * this.TEXTURE_SIZE);
+
+        for (let i: number = 1; i < texturesCounts.y; i++)
+            guides.add(Direction.HORIZONTAL, i * this.TEXTURE_SIZE);
+    }
+
+    private deleteGuides(): void {
+        const guides: IExtGuides = app.activeDocument.guides as IExtGuides;
+
+        while (guides.length > 0) {
+            for (let i: number = 0; i < guides.length; i++) {
+                const guide: Guide = guides[i];
+                guide.remove();
+            }
+        }
     }
 
     private fail(error: string): void {

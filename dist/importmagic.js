@@ -13,6 +13,7 @@ var ImportMagic = (function () {
         this.getTileInfo();
         this.setDocDimensions();
         this.moveTextures();
+        this.drawGuidesConfirmation();
         this.finish();
     }
     ImportMagic.prototype.hasBackgroundLayer = function () {
@@ -143,6 +144,29 @@ var ImportMagic = (function () {
             return;
         var imageScalePercentage = (1 / divider) * 100;
         layer.resize(imageScalePercentage, imageScalePercentage, AnchorPosition.TOPLEFT);
+    };
+    ImportMagic.prototype.drawGuidesConfirmation = function () {
+        var confirmation = confirm('Draw guides?', true, 'Magic Guides');
+        if (confirmation)
+            this.drawGuides();
+    };
+    ImportMagic.prototype.drawGuides = function () {
+        var texturesCounts = this.getTexturesCounts();
+        var guides = app.activeDocument.guides;
+        this.deleteGuides();
+        for (var i = 1; i < texturesCounts.x; i++)
+            guides.add(Direction.VERTICAL, i * this.TEXTURE_SIZE);
+        for (var i = 1; i < texturesCounts.y; i++)
+            guides.add(Direction.HORIZONTAL, i * this.TEXTURE_SIZE);
+    };
+    ImportMagic.prototype.deleteGuides = function () {
+        var guides = app.activeDocument.guides;
+        while (guides.length > 0) {
+            for (var i = 0; i < guides.length; i++) {
+                var guide = guides[i];
+                guide.remove();
+            }
+        }
     };
     ImportMagic.prototype.fail = function (error) {
         this.restoreRulerUnits();

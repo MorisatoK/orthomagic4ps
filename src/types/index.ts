@@ -26,3 +26,8 @@ interface ITexInfo {
     tex_y: number;
     tex_zoom: number;
 }
+
+interface IExtGuides extends Guides {
+    [index: number]: Guide;
+    add(direction: Direction, coordinate: UnitValue | number): Guide;
+}
