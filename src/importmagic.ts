@@ -62,11 +62,11 @@ class ImportMagic {
     }
 
     private parseTileInfoFromDocName(docName: string): ITileInfo {
-        const regex = /([+-]\d{1,3})/g;
-        const latLon = docName.match(regex);
-        const zoom = docName.split('_')[1];
+        const regex: RegExp = /([+-]\d{1,3})/g;
+        const latLon: RegExpMatchArray | null = docName.match(regex);
+        const zoom: string | undefined = docName.split('_')[1];
     
-        if (latLon === null || latLon?.length <= 1)
+        if (latLon === null || latLon?.length <= 1 || typeof zoom === 'undefined')
             throw '';
 
         return {lat: parseInt(latLon[0], 10), lon: parseInt(latLon[1], 10), zoom: parseInt(zoom, 10)};

@@ -52,7 +52,7 @@ var ImportMagic = (function () {
         var regex = /([+-]\d{1,3})/g;
         var latLon = docName.match(regex);
         var zoom = docName.split('_')[1];
-        if (latLon === null || (latLon === null || latLon === void 0 ? void 0 : latLon.length) <= 1)
+        if (latLon === null || (latLon === null || latLon === void 0 ? void 0 : latLon.length) <= 1 || typeof zoom === 'undefined')
             throw '';
         return { lat: parseInt(latLon[0], 10), lon: parseInt(latLon[1], 10), zoom: parseInt(zoom, 10) };
     };
