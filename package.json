@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/MorisatoK/orthomagic4ps#readme",
   "devDependencies": {
+    "prettier": "^2.0.5",
     "types-for-adobe": "^3.0.0",
     "typescript": "^3.9.3"
   }
