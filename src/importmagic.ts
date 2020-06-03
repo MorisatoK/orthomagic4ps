@@ -73,17 +73,17 @@ class ImportMagic {
     }
 
     private setDocDimensions(): void {
-        const texturesCounts = this.getTexturesCounts();
-        const xDimension = this.calcDimension(texturesCounts.x);
-        const yDimension = this.calcDimension(texturesCounts.y);
+        const texturesCounts: ITexCount = this.getTexturesCounts();
+        const xDimension: number = this.calcDimension(texturesCounts.x);
+        const yDimension: number = this.calcDimension(texturesCounts.y);
         
         app.activeDocument.resizeCanvas(xDimension, yDimension)
     }
     
     private getTexturesCounts(): ITexCount {
         const textureCoords: ITexCoords = this.getTextureCoords(this.tileInfo!.zoom);
-        const xTexturesCount = (textureCoords.right - textureCoords.left) / 16 + 1;
-        const yTexturesCount = (textureCoords.bottom - textureCoords.top) / 16 + 1;
+        const xTexturesCount: number = (textureCoords.right - textureCoords.left) / 16 + 1;
+        const yTexturesCount: number = (textureCoords.bottom - textureCoords.top) / 16 + 1;
     
         return {x: xTexturesCount, y: yTexturesCount};
     }
