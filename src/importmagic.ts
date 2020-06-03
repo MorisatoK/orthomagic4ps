@@ -100,21 +100,21 @@ class ImportMagic {
     }
     
     private wgs84_to_texture(lat: number, lon: number, zoom: number): ITexCoord {
+        const zoomDivider: number = this.getPositionDivider(zoom);
         const ratio_x: number = lon / 180;           
         const ratio_y: number = Math.log(Math.tan((90 + lat) * Math.PI / 360)) / Math.PI;
         const pic_x: number = (ratio_x + 1) * Math.pow(2, (zoom + 7));
         const pic_y: number = (1 - ratio_y) * Math.pow(2, (zoom + 7));
         const tile_x: number = Math.floor(pic_x / 256);
         const tile_y: number = Math.floor(pic_y / 256);
-        const tex_x: number = Math.floor(tile_x / 16) * 16;
-        const tex_y: number = Math.floor(tile_y / 16) * 16;
+        const tex_x: number = Math.floor(tile_x / zoomDivider) * zoomDivider;
+        const tex_y: number = Math.floor(tile_y / zoomDivider) * zoomDivider;
         
         return {x: tex_x, y: tex_y};
     }
 
     private moveTextures(): void {
         const layers: Layers = app.activeDocument.layers;
-        const positionDivider: number = 16;
     
         for (var i = 0; i < layers.length; i++) {
             const texInfo: ITexInfo | null = this.getLayerInfo(layers[i]);
@@ -124,25 +124,27 @@ class ImportMagic {
                 continue;
             }
 
-            // For placing higher ZL than document
-            const positionDividerMultiplier: number = Math.pow(2, texInfo.tex_zoom - this.tileInfo!.zoom);
-    
             const textureCoords: ITexCoords = this.getTextureCoords(texInfo.tex_zoom);
-            const xPos = (texInfo.tex_x - textureCoords.left) / (positionDivider * positionDividerMultiplier);
-            let yPos = (texInfo.tex_y - textureCoords.top) / (positionDivider * positionDividerMultiplier);
-    
-            // No idea why this offset is needed
-            if ((texInfo.tex_zoom - this.tileInfo!.zoom) >= 2) {
-                yPos += 1 / positionDividerMultiplier;
-            }
-    
+            const xPos = (texInfo.tex_x - textureCoords.left) / this.getPositionDivider(texInfo.tex_zoom);
+            const yPos = (texInfo.tex_y - textureCoords.top) / this.getPositionDivider(texInfo.tex_zoom);
+        
             this.moveLayerTo(layers[i], xPos, yPos);
     
             // For placing higher ZL than document
             if (texInfo.tex_zoom !== this.tileInfo!.zoom) {
-                this.scaleLayer(layers[i], positionDividerMultiplier);
+                this.scaleLayer(layers[i], this.getPositionDividerMultiplier(texInfo.tex_zoom));
             }
         }
+    }
+
+    private getPositionDivider(zoom: number): number {
+        const positionDividerBaseValue: number = 16;
+
+        return positionDividerBaseValue * this.getPositionDividerMultiplier(zoom);
+    }
+
+    private getPositionDividerMultiplier(zoom: number): number {
+        return Math.pow(2, zoom - this.tileInfo!.zoom);
     }
 
     private getLayerInfo(layer: Layer): ITexInfo | null {

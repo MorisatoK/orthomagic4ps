@@ -77,37 +77,40 @@ var ImportMagic = (function () {
         return { left: leftTop.x, top: leftTop.y, right: rightBottom.x, bottom: rightBottom.y };
     };
     ImportMagic.prototype.wgs84_to_texture = function (lat, lon, zoom) {
+        var zoomDivider = this.getPositionDivider(zoom);
         var ratio_x = lon / 180;
         var ratio_y = Math.log(Math.tan((90 + lat) * Math.PI / 360)) / Math.PI;
         var pic_x = (ratio_x + 1) * Math.pow(2, (zoom + 7));
         var pic_y = (1 - ratio_y) * Math.pow(2, (zoom + 7));
         var tile_x = Math.floor(pic_x / 256);
         var tile_y = Math.floor(pic_y / 256);
-        var tex_x = Math.floor(tile_x / 16) * 16;
-        var tex_y = Math.floor(tile_y / 16) * 16;
+        var tex_x = Math.floor(tile_x / zoomDivider) * zoomDivider;
+        var tex_y = Math.floor(tile_y / zoomDivider) * zoomDivider;
         return { x: tex_x, y: tex_y };
     };
     ImportMagic.prototype.moveTextures = function () {
         var layers = app.activeDocument.layers;
-        var positionDivider = 16;
         for (var i = 0; i < layers.length; i++) {
             var texInfo = this.getLayerInfo(layers[i]);
             if (texInfo === null) {
                 this.skippedLayers++;
                 continue;
             }
-            var positionDividerMultiplier = Math.pow(2, texInfo.tex_zoom - this.tileInfo.zoom);
             var textureCoords = this.getTextureCoords(texInfo.tex_zoom);
-            var xPos = (texInfo.tex_x - textureCoords.left) / (positionDivider * positionDividerMultiplier);
-            var yPos = (texInfo.tex_y - textureCoords.top) / (positionDivider * positionDividerMultiplier);
-            if ((texInfo.tex_zoom - this.tileInfo.zoom) >= 2) {
-                yPos += 1 / positionDividerMultiplier;
-            }
+            var xPos = (texInfo.tex_x - textureCoords.left) / this.getPositionDivider(texInfo.tex_zoom);
+            var yPos = (texInfo.tex_y - textureCoords.top) / this.getPositionDivider(texInfo.tex_zoom);
             this.moveLayerTo(layers[i], xPos, yPos);
             if (texInfo.tex_zoom !== this.tileInfo.zoom) {
-                this.scaleLayer(layers[i], positionDividerMultiplier);
+                this.scaleLayer(layers[i], this.getPositionDividerMultiplier(texInfo.tex_zoom));
             }
         }
+    };
+    ImportMagic.prototype.getPositionDivider = function (zoom) {
+        var positionDividerBaseValue = 16;
+        return positionDividerBaseValue * this.getPositionDividerMultiplier(zoom);
+    };
+    ImportMagic.prototype.getPositionDividerMultiplier = function (zoom) {
+        return Math.pow(2, zoom - this.tileInfo.zoom);
     };
     ImportMagic.prototype.getLayerInfo = function (layer) {
         var splitName = layer.name.split('_');

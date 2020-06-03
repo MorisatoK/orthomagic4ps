@@ -33,8 +33,5 @@ This script will place the orthophotos next to each other on the canvas. Short t
 12. If you have configured larger zoom levels, you might notice missing pieces - because Ortho4XP didn't download them at the base zoom level.
 13. For adding those, basically repeat steps 3 to 9 for each zoom level you want to add. Just make sure the newly placed orthophotos are above those with lower zoom level. Alternatively create a new document and start with step 1 again, but with adjusted zoom level.
 
-#### Known issues
-* Mixing zoom levels in one document sometimes results in the higher zoom level orthophotos being shifted by one ore two "units" on the x and y axis. Manual adjustment is needed here. For the time being it is recommended to not mix zoom levels.
-
 ### Export Magic
 Would be nice to have ... but I could not come up with some magically automated way yet - especially with mixed zoom levels in one document.
