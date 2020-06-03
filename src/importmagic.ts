@@ -125,8 +125,8 @@ class ImportMagic {
             }
 
             const textureCoords: ITexCoords = this.getTextureCoords(texInfo.tex_zoom);
-            const xPos = (texInfo.tex_x - textureCoords.left) / this.getPositionDivider(texInfo.tex_zoom);
-            const yPos = (texInfo.tex_y - textureCoords.top) / this.getPositionDivider(texInfo.tex_zoom);
+            const xPos: number = (texInfo.tex_x - textureCoords.left) / this.getPositionDivider(texInfo.tex_zoom);
+            const yPos: number = (texInfo.tex_y - textureCoords.top) / this.getPositionDivider(texInfo.tex_zoom);
         
             this.moveLayerTo(layers[i], xPos, yPos);
     
@@ -185,14 +185,14 @@ class ImportMagic {
     }
     
     private scaleLayer(layer: Layer, divider: number): void {
-        var bounds: UnitRect = layer.bounds;
-        var width = <number>bounds[2] - <number>bounds[0];
+        const bounds: UnitRect = layer.bounds;
+        const width: number = <number>bounds[2] - <number>bounds[0];
     
         // Only resize if it is not yet resized
         if (width !== this.TEXTURE_SIZE)
             return;
     
-        var imageScalePercentage = (1 / divider) * 100;
+        const imageScalePercentage: number = (1 / divider) * 100;
         layer.resize(imageScalePercentage, imageScalePercentage, AnchorPosition.TOPLEFT);
     }
 
