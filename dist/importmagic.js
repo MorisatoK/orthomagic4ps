@@ -55,7 +55,11 @@ var ImportMagic = (function () {
         var zoom = docName.split('_')[1];
         if (latLon === null || (latLon === null || latLon === void 0 ? void 0 : latLon.length) <= 1 || typeof zoom === 'undefined')
             throw '';
-        return { lat: parseInt(latLon[0], 10), lon: parseInt(latLon[1], 10), zoom: parseInt(zoom, 10) };
+        return {
+            lat: parseInt(latLon[0], 10),
+            lon: parseInt(latLon[1], 10),
+            zoom: parseInt(zoom, 10)
+        };
     };
     ImportMagic.prototype.setDocDimensions = function () {
         var texturesCounts = this.getTexturesCounts();
@@ -75,14 +79,19 @@ var ImportMagic = (function () {
     ImportMagic.prototype.getTextureCoords = function (zoom) {
         var leftTop = this.wgs84_to_texture(this.tileInfo.lat + 1, this.tileInfo.lon, zoom);
         var rightBottom = this.wgs84_to_texture(this.tileInfo.lat, this.tileInfo.lon + 1, zoom);
-        return { left: leftTop.x, top: leftTop.y, right: rightBottom.x, bottom: rightBottom.y };
+        return {
+            left: leftTop.x,
+            top: leftTop.y,
+            right: rightBottom.x,
+            bottom: rightBottom.y
+        };
     };
     ImportMagic.prototype.wgs84_to_texture = function (lat, lon, zoom) {
         var zoomDivider = this.getPositionDivider(zoom);
         var ratio_x = lon / 180;
-        var ratio_y = Math.log(Math.tan((90 + lat) * Math.PI / 360)) / Math.PI;
-        var pic_x = (ratio_x + 1) * Math.pow(2, (zoom + 7));
-        var pic_y = (1 - ratio_y) * Math.pow(2, (zoom + 7));
+        var ratio_y = Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / Math.PI;
+        var pic_x = (ratio_x + 1) * Math.pow(2, zoom + 7);
+        var pic_y = (1 - ratio_y) * Math.pow(2, zoom + 7);
         var tile_x = Math.floor(pic_x / 256);
         var tile_y = Math.floor(pic_y / 256);
         var tex_x = Math.floor(tile_x / zoomDivider) * zoomDivider;
@@ -128,8 +137,8 @@ var ImportMagic = (function () {
     };
     ImportMagic.prototype.moveLayerTo = function (layer, x, y) {
         var bounds = layer.bounds;
-        var x_pos = (x * this.TEXTURE_SIZE) - bounds[0];
-        var y_pos = (y * this.TEXTURE_SIZE) - bounds[1];
+        var x_pos = x * this.TEXTURE_SIZE - bounds[0];
+        var y_pos = y * this.TEXTURE_SIZE - bounds[1];
         if (x_pos === 0 && y_pos === 0) {
             this.skippedLayers++;
             return;
