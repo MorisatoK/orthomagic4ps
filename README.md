@@ -1,3 +1,5 @@
+![Magic](./magic.gif)
+
 # orthomagic4ps
 Magic Photoshop scripts to make editing orthophotos easier. Intended as a supplement to [Ortho4XP](https://github.com/oscarpilote/Ortho4XP), as such knowing your way around it is required.
 
