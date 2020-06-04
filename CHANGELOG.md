@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.2.0 (unreleased)
+## 0.2.0 (2020-06-04)
 
 Feature:
   - Dialog to add guides to the document after placing the textures
