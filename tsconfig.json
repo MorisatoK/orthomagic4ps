@@ -8,7 +8,7 @@
         "strict": true,
         "noLib": true,
         "removeComments": true,
-        "types": ["types-for-adobe/Photoshop/2015.5"]
+        "types": ["types-for-adobe/Photoshop/2015.5", "./src/types"]
     },
     "exclude": [
         "node_modules"
