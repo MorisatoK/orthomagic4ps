@@ -7,6 +7,17 @@
     "lint": "eslint */**/*.ts",
     "pretty": "prettier --check */**/*.{js,ts}"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "prettier --check",
+      "eslint"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MorisatoK/orthomagic4ps.git"
@@ -28,6 +39,9 @@
     "@typescript-eslint/parser": "^3.1.0",
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.9",
+    "mrm": "^2.3.0",
     "prettier": "^2.0.5",
     "types-for-adobe": "^3.0.0",
     "typescript": "^3.9.3"
