@@ -99,6 +99,7 @@ class ExportMagic {
     private processTextures(): void {
         this.setHistoryState(this.PROC_START_SNAPSHOT_NAME);
 
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         for (let i: number = this.tileInfo!.zoom; i <= this.MAX_ZOOM; i++) {
             // eslint-disable-next-line no-prototype-builtins
             if (!this.zoomGroups.hasOwnProperty(i.toString())) continue;
@@ -124,6 +125,7 @@ class ExportMagic {
      * Also deleting all invisible layers at once is very much faster than deleting every layer on its own.
      */
     private clearCanvas(currentLayer: Layer): void {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         for (let i: number = this.tileInfo!.zoom; i <= this.MAX_ZOOM; i++) {
             // eslint-disable-next-line no-prototype-builtins
             if (!this.zoomGroups.hasOwnProperty(i.toString())) continue;
@@ -156,6 +158,7 @@ class ExportMagic {
     }
 
     private resizeCanvas(zoom: number): void {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const zoomDiff: number = zoom - this.tileInfo!.zoom;
         const multiplier: number = Math.pow(2, zoomDiff);
         const width: number | UnitValue = app.activeDocument.width;
@@ -235,6 +238,7 @@ class ExportMagic {
         if (isNaN(tex_x) || isNaN(tex_y) || isNaN(tex_zoom)) return null;
 
         // Some sanity check for supported zoom levels
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (tex_zoom < this.tileInfo!.zoom || tex_zoom > 19) return null;
 
         return {tex_x, tex_y, tex_zoom};
