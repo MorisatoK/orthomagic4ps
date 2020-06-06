@@ -3,8 +3,8 @@ class ImportMagic {
     private originalRulerUnits: Units | undefined;
     private documentName: string | undefined;
     private tileInfo: ITileInfo | undefined;
-    private movedLayers: number = 0;
-    private skippedLayers: number = 0;
+    private movedLayers = 0;
+    private skippedLayers = 0;
 
     constructor() {
         if (!app.documents.length) this.fail('No document to work with.');
@@ -59,7 +59,7 @@ class ImportMagic {
     }
 
     private parseTileInfoFromDocName(docName: string): ITileInfo {
-        const regex: RegExp = /([+-]\d{1,3})/g;
+        const regex = /([+-]\d{1,3})/g;
         const latLon: RegExpMatchArray | null = docName.match(regex);
         const zoom: string | undefined = docName.split('_')[1];
 
@@ -121,7 +121,9 @@ class ImportMagic {
     private moveTextures(): void {
         const layers: Layers = app.activeDocument.layers;
 
-        for (let i: number = 0; i < layers.length; i++) {
+        // Type 'Layers' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < layers.length; i++) {
             const texInfo: ITexInfo | null = this.getLayerInfo(layers[i]);
 
             if (texInfo === null) {
@@ -143,7 +145,7 @@ class ImportMagic {
     }
 
     private getPositionDivider(zoom: number): number {
-        const positionDividerBaseValue: number = 16;
+        const positionDividerBaseValue = 16;
 
         return positionDividerBaseValue * this.getPositionDividerMultiplier(zoom);
     }
@@ -205,20 +207,22 @@ class ImportMagic {
 
     private drawGuides(): void {
         const texturesCounts: ITexCount = this.getTexturesCounts();
-        const guides: IExtGuides = app.activeDocument.guides as IExtGuides;
+        const guides: IExtGuides = <IExtGuides>app.activeDocument.guides;
 
         this.deleteGuides();
 
-        for (let i: number = 1; i < texturesCounts.x; i++) guides.add(Direction.VERTICAL, i * this.TEXTURE_SIZE);
+        for (let i = 1; i < texturesCounts.x; i++) guides.add(Direction.VERTICAL, i * this.TEXTURE_SIZE);
 
-        for (let i: number = 1; i < texturesCounts.y; i++) guides.add(Direction.HORIZONTAL, i * this.TEXTURE_SIZE);
+        for (let i = 1; i < texturesCounts.y; i++) guides.add(Direction.HORIZONTAL, i * this.TEXTURE_SIZE);
     }
 
     private deleteGuides(): void {
-        const guides: IExtGuides = app.activeDocument.guides as IExtGuides;
+        const guides: IExtGuides = <IExtGuides>app.activeDocument.guides;
 
         while (guides.length > 0) {
-            for (let i: number = 0; i < guides.length; i++) {
+            // Type 'IExtGuides' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.
+            // eslint-disable-next-line @typescript-eslint/prefer-for-of
+            for (let i = 0; i < guides.length; i++) {
                 const guide: Guide = guides[i];
                 guide.remove();
             }
@@ -238,4 +242,5 @@ class ImportMagic {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const importMagic: ImportMagic = new ImportMagic();

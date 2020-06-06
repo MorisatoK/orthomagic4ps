@@ -29,5 +29,5 @@ interface ITexInfo {
 
 interface IExtGuides extends Guides {
     [index: number]: Guide;
-    add(direction: Direction, coordinate: UnitValue | number): Guide;
+    add: (direction: Direction, coordinate: UnitValue | number) => Guide;
 }
