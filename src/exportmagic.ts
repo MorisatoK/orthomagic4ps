@@ -1,6 +1,7 @@
 class ExportMagic {
     private readonly MAX_ZOOM: number = 19;
     private readonly PROC_START_SNAPSHOT_NAME: string = 'PROCSTART';
+    private readonly EXPORT_OPTIONS: JPEGSaveOptions = new JPEGSaveOptions();
     private cTID: (str: string) => number = (str: string) => app.charIDToTypeID(str);
     private sTID: (str: string) => number = (str: string) => app.stringIDToTypeID(str);
 
@@ -12,6 +13,7 @@ class ExportMagic {
     constructor() {
         this.checkPreconditions();
         this.initRulerUnits();
+        this.setExportOptions();
         this.getDocumentName();
         this.getTileInfo();
         this.groupTexByZoom();
@@ -45,6 +47,14 @@ class ExportMagic {
 
     private restoreRulerUnits(): void {
         if (typeof this.originalRulerUnits !== 'undefined') app.preferences.rulerUnits = this.originalRulerUnits;
+    }
+
+    private setExportOptions(): void {
+        this.EXPORT_OPTIONS.embedColorProfile = true;
+        // Somewhat higher than input JPEG, because lossyness
+        this.EXPORT_OPTIONS.quality = 9;
+        this.EXPORT_OPTIONS.formatOptions = FormatOptions.STANDARDBASELINE;
+        this.EXPORT_OPTIONS.matte = MatteType.NONE;
     }
 
     private getDocumentName(): void {
@@ -114,9 +124,33 @@ class ExportMagic {
 
                 if (i !== this.tileInfo?.zoom) this.resizeCanvas(i);
 
-                // ToDo: Export
+                this.exportCanvas(layer);
             }
         }
+    }
+
+    private exportCanvas(layer: Layer): void {
+        const document: Document = app.activeDocument;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const ortho4xpName: string = this.documentName!.split('_')[0];
+        const providerName: string = this.getProviderDirectoryName(layer.name);
+
+        const destination = new Folder(`${document.path.toString()}/magicexport/${ortho4xpName}/${providerName}`);
+
+        if (!destination.exists) destination.create();
+
+        const file: File = new File(`${destination.toString()}/${layer.name}.jpg`);
+
+        document.saveAs(file, this.EXPORT_OPTIONS, true, Extension.LOWERCASE);
+    }
+
+    private getProviderDirectoryName(name: string): string {
+        const nameParts: string[] = name.split('_');
+        const providerPart: string = nameParts[2];
+        const provider: string = providerPart.slice(0, -2);
+        const zoom: string = providerPart.slice(-2);
+
+        return `${provider}_${zoom}`;
     }
 
     /** It's faster to delete all other layers on every iteration and then crop and resize,
