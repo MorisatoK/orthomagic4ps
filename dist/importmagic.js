@@ -99,6 +99,7 @@ var ImportMagic = (function () {
         return { x: tex_x, y: tex_y };
     };
     ImportMagic.prototype.moveTextures = function () {
+        var _a;
         var layers = app.activeDocument.layers;
         for (var i = 0; i < layers.length; i++) {
             var texInfo = this.getLayerInfo(layers[i]);
@@ -110,7 +111,7 @@ var ImportMagic = (function () {
             var xPos = (texInfo.tex_x - textureCoords.left) / this.getPositionDivider(texInfo.tex_zoom);
             var yPos = (texInfo.tex_y - textureCoords.top) / this.getPositionDivider(texInfo.tex_zoom);
             this.moveLayerTo(layers[i], xPos, yPos);
-            if (texInfo.tex_zoom !== this.tileInfo.zoom) {
+            if (texInfo.tex_zoom !== ((_a = this.tileInfo) === null || _a === void 0 ? void 0 : _a.zoom)) {
                 this.scaleLayer(layers[i], this.getPositionDividerMultiplier(texInfo.tex_zoom));
             }
         }

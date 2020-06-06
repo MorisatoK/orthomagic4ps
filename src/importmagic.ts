@@ -81,6 +81,7 @@ class ImportMagic {
     }
 
     private getTexturesCounts(): ITexCount {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const textureCoords: ITexCoords = this.getTextureCoords(this.tileInfo!.zoom);
         const xTexturesCount: number = (textureCoords.right - textureCoords.left) / 16 + 1;
         const yTexturesCount: number = (textureCoords.bottom - textureCoords.top) / 16 + 1;
@@ -93,8 +94,10 @@ class ImportMagic {
     }
 
     private getTextureCoords(zoom: number): ITexCoords {
+        /* eslint-disable @typescript-eslint/no-non-null-assertion */
         const leftTop: ITexCoord = this.wgs84_to_texture(this.tileInfo!.lat + 1, this.tileInfo!.lon, zoom);
         const rightBottom: ITexCoord = this.wgs84_to_texture(this.tileInfo!.lat, this.tileInfo!.lon + 1, zoom);
+        /* eslint-enable @typescript-eslint/no-non-null-assertion */
 
         return {
             left: leftTop.x,
@@ -138,7 +141,7 @@ class ImportMagic {
             this.moveLayerTo(layers[i], xPos, yPos);
 
             // For placing higher ZL than document
-            if (texInfo.tex_zoom !== this.tileInfo!.zoom) {
+            if (texInfo.tex_zoom !== this.tileInfo?.zoom) {
                 this.scaleLayer(layers[i], this.getPositionDividerMultiplier(texInfo.tex_zoom));
             }
         }
@@ -151,6 +154,7 @@ class ImportMagic {
     }
 
     private getPositionDividerMultiplier(zoom: number): number {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return Math.pow(2, zoom - this.tileInfo!.zoom);
     }
 
@@ -168,6 +172,7 @@ class ImportMagic {
         if (isNaN(tex_x) || isNaN(tex_y) || isNaN(tex_zoom)) return null;
 
         // Some sanity check for supported zoom levels
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (tex_zoom < this.tileInfo!.zoom || tex_zoom > 19) return null;
 
         return {tex_x, tex_y, tex_zoom};
