@@ -27,6 +27,10 @@ interface ITexInfo {
     tex_zoom: number;
 }
 
+interface ITexZoomGroups {
+    [zoom: number]: Layer[];
+}
+
 interface IExtGuides extends Guides {
     [index: number]: Guide;
     add: (direction: Direction, coordinate: UnitValue | number) => Guide;

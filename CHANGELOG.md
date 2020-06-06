@@ -2,6 +2,9 @@
 
 ## 0.3.0 (unreleased)
 
+Feature:
+  - Export Magic (WIP)
+
 Behind the scene changes for code sanity.
 
 ## 0.2.0 (2020-06-04)
