@@ -104,8 +104,6 @@ class ExportMagic {
             // eslint-disable-next-line no-prototype-builtins
             if (!this.zoomGroups.hasOwnProperty(i.toString())) continue;
 
-            // if (i !== this.tileInfo!.zoom) this.resizeCanvas(i);
-
             const zoomGroup: Layer[] = this.zoomGroups[i];
 
             for (const layer of zoomGroup) {
@@ -114,7 +112,8 @@ class ExportMagic {
 
                 app.activeDocument.crop(layer.bounds);
 
-                // ToDo: Resize when higher zoom level
+                if (i !== this.tileInfo?.zoom) this.resizeCanvas(i);
+
                 // ToDo: Export
             }
         }
@@ -125,6 +124,8 @@ class ExportMagic {
      * Also deleting all invisible layers at once is very much faster than deleting every layer on its own.
      */
     private clearCanvas(currentLayer: Layer): void {
+        // ToDo: Check for higher zoom level layer bounds over layer and skip deleting them
+
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         for (let i: number = this.tileInfo!.zoom; i <= this.MAX_ZOOM; i++) {
             // eslint-disable-next-line no-prototype-builtins
@@ -157,6 +158,9 @@ class ExportMagic {
         app.executeAction(this.sTID('delete'), descriptor, DialogModes.NO);
     }
 
+    /** Each layer needs to be resized separately after crop, otherwise the document would easily end up
+     * with several hundred thousand pixels dimensions - and Photoshop does not like that
+     */
     private resizeCanvas(zoom: number): void {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const zoomDiff: number = zoom - this.tileInfo!.zoom;
@@ -164,9 +168,7 @@ class ExportMagic {
         const width: number | UnitValue = app.activeDocument.width;
         const height: number | UnitValue = app.activeDocument.height;
 
-        // app.activeDocument.resizeImage(<number>width * multiplier, <number>height * multiplier);
-
-        // alert(`${<number>width * multiplier}, ${<number>height * multiplier}`);
+        app.activeDocument.resizeImage(<number>width * multiplier, <number>height * multiplier);
     }
 
     private setHistoryState(name: string): void {
