@@ -118,7 +118,7 @@ class ExportMagic {
 
             for (const layer of zoomGroup) {
                 this.setActiveSnapshot(this.PROC_START_SNAPSHOT_NAME);
-                this.clearCanvas(layer);
+                this.clearCanvas(layer, i);
 
                 app.activeDocument.crop(layer.bounds);
 
@@ -134,8 +134,7 @@ class ExportMagic {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const ortho4xpName: string = this.documentName!.split('_')[0];
         const providerName: string = this.getProviderDirectoryName(layer.name);
-
-        const destination = new Folder(`${document.path.toString()}/magicexport/${ortho4xpName}/${providerName}`);
+        const destination = new Folder(`${document.path.toString()}/orthomagic4ps/${ortho4xpName}/${providerName}`);
 
         if (!destination.exists) destination.create();
 
@@ -157,9 +156,7 @@ class ExportMagic {
      * than cropping and resizing the document with all layers/smart objects for every iteration.
      * Also deleting all invisible layers at once is very much faster than deleting every layer on its own.
      */
-    private clearCanvas(currentLayer: Layer): void {
-        // ToDo: Check for higher zoom level layer bounds over layer and skip deleting them
-
+    private clearCanvas(currentLayer: Layer, currentZoom: number): void {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         for (let i: number = this.tileInfo!.zoom; i <= this.MAX_ZOOM; i++) {
             // eslint-disable-next-line no-prototype-builtins
@@ -168,7 +165,11 @@ class ExportMagic {
             const zoomGroup: Layer[] = this.zoomGroups[i];
 
             for (const layer of zoomGroup) {
-                if (layer.name === currentLayer.name) continue;
+                if (
+                    layer.name === currentLayer.name ||
+                    (i > currentZoom && this.isLayerOverlapping(currentLayer, layer))
+                )
+                    continue;
 
                 // If there are linked layers, remove them as well.
                 // Special case for using cut masks - see wiki.
@@ -180,6 +181,20 @@ class ExportMagic {
         }
 
         this.deleteHiddenLayers();
+    }
+
+    private isLayerOverlapping(currentLayer: Layer, overlapLayer: Layer): boolean {
+        const cLeft: number | UnitValue = currentLayer.bounds[0];
+        const cTop: number | UnitValue = currentLayer.bounds[1];
+        const cRight: number | UnitValue = currentLayer.bounds[2];
+        const cBottom: number | UnitValue = currentLayer.bounds[3];
+
+        const oLeft: number | UnitValue = overlapLayer.bounds[0];
+        const oTop: number | UnitValue = overlapLayer.bounds[1];
+        const oRight: number | UnitValue = overlapLayer.bounds[2];
+        const oBottom: number | UnitValue = overlapLayer.bounds[3];
+
+        return cLeft < oRight && oLeft < cRight && cTop < oBottom && oTop < cBottom;
     }
 
     private deleteHiddenLayers(): void {
