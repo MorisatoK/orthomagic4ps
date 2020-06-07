@@ -1,9 +1,9 @@
 # CHANGELOG
 
-## 0.3.0 (unreleased)
+## 1.0.0 (2020-06-07)
 
 Feature:
-  - Export Magic (WIP)
+  - Export Magic
 
 Behind the scene changes for code sanity.
 
