@@ -1,6 +1,6 @@
 {
   "name": "orthomagic4ps",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Magic Photoshop scripts to make editing orthophotos easier",
   "scripts": {
     "watch": "tsc --watch",
