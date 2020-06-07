@@ -245,7 +245,6 @@ class ExportMagic {
 
             if (!state.snapshot) continue;
 
-            // ToDo: delete further named snapshots that have been created, if there are any
             if (state.name === this.PROC_START_SNAPSHOT_NAME) this.removeSnapshot(state.name);
         }
     }
