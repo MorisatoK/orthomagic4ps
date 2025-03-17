@@ -1,3 +1,6 @@
+> [!NOTE]
+> This extension is no longer maintained. As I am neither using XPlane nor Photoshop any longer. The extension might or might not still work. As an alternative you could try [AutoOrtho](https://github.com/kubilus1/autoortho).
+
 ![Magic](./magic.gif)
 
 # orthomagic4ps
